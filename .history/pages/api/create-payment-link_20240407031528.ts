@@ -1,4 +1,3 @@
-// pages/api/create-payment-link.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { clusterApiUrl, Connection, PublicKey, Keypair } from "@solana/web3.js";
 import { encodeURL } from "@solana/pay";
@@ -6,31 +5,21 @@ import BigNumber from "bignumber.js";
 import fs from "fs";
 import path from "path";
 
-// Function to append reference ID and public key to a JSON file within the 'data' folder in the 'public' directory
+// Function to append reference ID and public key to a JSON file
 const appendToJSONFile = (id: string, publicKey: string) => {
-  // Adjusted path to point to 'data' folder within the 'public' directory
-  const filePath = path.join(
-    process.cwd(),
-    "public",
-    "data",
-    "references.json"
-  );
+  const dirPath = path.join(process.cwd(), "data");
+  const filePath = path.join(dirPath, "references.json");
 
-  // Ensure the 'data' directory exists within 'public'
-  const dirPath = path.dirname(filePath);
   if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
+    fs.mkdirSync(dirPath);
   }
 
-  // Check if the 'references.json' file exists and read it, otherwise start with an empty array
   const fileData: { id: string; publicKey: string }[] = fs.existsSync(filePath)
     ? JSON.parse(fs.readFileSync(filePath, "utf8"))
     : [];
 
-  // Append the new data to the fileData array
   fileData.push({ id, publicKey });
 
-  // Write the updated array back to 'references.json' within the 'public/data' directory
   fs.writeFileSync(filePath, JSON.stringify(fileData, null, 2));
 };
 
@@ -64,13 +53,13 @@ export default async function handler(
     });
 
     appendToJSONFile(
-      referencePublicKey.toString(),
+      referenceKeypair.publicKey.toString(),
       recipientPublicKey.toString()
     );
 
     return res.status(200).json({
       url,
-      referenceID: referencePublicKey.toString(),
+      referenceID: referencePublicKey.toString(), // This is what the frontend expects
       recipientPublicKey: recipientPublicKey.toString(),
     });
   } catch (error) {

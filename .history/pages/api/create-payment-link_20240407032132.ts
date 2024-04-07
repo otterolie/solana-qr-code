@@ -6,21 +6,10 @@ import BigNumber from "bignumber.js";
 import fs from "fs";
 import path from "path";
 
-// Function to append reference ID and public key to a JSON file within the 'data' folder in the 'public' directory
+// Function to append reference ID and public key to a JSON file in the public directory
 const appendToJSONFile = (id: string, publicKey: string) => {
-  // Adjusted path to point to 'data' folder within the 'public' directory
-  const filePath = path.join(
-    process.cwd(),
-    "public",
-    "data",
-    "references.json"
-  );
-
-  // Ensure the 'data' directory exists within 'public'
-  const dirPath = path.dirname(filePath);
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
-  }
+  // Path to the 'public' directory
+  const filePath = path.join(process.cwd(), "public", "references.json");
 
   // Check if the 'references.json' file exists and read it, otherwise start with an empty array
   const fileData: { id: string; publicKey: string }[] = fs.existsSync(filePath)
@@ -30,7 +19,7 @@ const appendToJSONFile = (id: string, publicKey: string) => {
   // Append the new data to the fileData array
   fileData.push({ id, publicKey });
 
-  // Write the updated array back to 'references.json' within the 'public/data' directory
+  // Write the updated array back to 'references.json' in the public directory
   fs.writeFileSync(filePath, JSON.stringify(fileData, null, 2));
 };
 
