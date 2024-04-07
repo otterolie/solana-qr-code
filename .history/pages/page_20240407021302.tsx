@@ -1,17 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import QRCodeStyling from "qr-code-styling";
 import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
-
-// Dynamically import the QRCodeComponent with SSR disabled
-const QRCodeComponent = dynamic(() => import("./qrcompoent"), {
-  ssr: false,
-});
 
 export default function Home() {
   const [paymentLink, setPaymentLink] = useState("");
   const [reference, setReference] = useState("");
   const [statusMessage, setStatusMessage] = useState("Initializing payment...");
   const router = useRouter();
+  const qrRef = useRef<HTMLDivElement>(null); // Use specific type for ref
+
+  useEffect(() => {
+    const qrCode = new QRCodeStyling({
+      width: 300,
+      height: 300,
+      type: "svg",
+      data: "",
+      image:
+        "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+      dotsOptions: {
+        color: "#4267b2",
+        type: "rounded",
+      },
+      backgroundOptions: {
+        color: "#e9ebee",
+      },
+      imageOptions: {
+        crossOrigin: "anonymous",
+        margin: 20,
+      },
+    });
+
+    if (qrRef.current) qrCode.append(qrRef.current);
+
+    return () => {
+      if (qrRef.current) qrRef.current.innerHTML = ""; // Clear the div's contents
+    };
+  }, []);
 
   useEffect(() => {
     let { address, amount } = router.query;
@@ -24,6 +48,32 @@ export default function Home() {
       setStatusMessage("Missing address or amount parameters.");
     }
   }, [router.query]);
+
+  useEffect(() => {
+    if (paymentLink && qrRef.current) {
+      const qrCode = new QRCodeStyling({
+        width: 300,
+        height: 300,
+        type: "svg",
+        data: paymentLink,
+        image:
+          "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+        dotsOptions: {
+          color: "#4267b2",
+          type: "rounded",
+        },
+        backgroundOptions: {
+          color: "#e9ebee",
+        },
+        imageOptions: {
+          crossOrigin: "anonymous",
+          margin: 20,
+        },
+      });
+
+      qrCode.append(qrRef.current);
+    }
+  }, [paymentLink]);
 
   const generatePaymentLink = async (recipient: string, amount: string) => {
     setStatusMessage("Generating payment link...");
@@ -54,7 +104,7 @@ export default function Home() {
     <div style={{ padding: "20px" }}>
       {paymentLink ? (
         <>
-          <QRCodeComponent paymentLink={paymentLink} />
+          <div style={{ marginTop: "20px" }} ref={qrRef}></div>
           <p>Reference ID: {reference}</p>
         </>
       ) : null}

@@ -17,8 +17,8 @@ const createPaymentRequestLink = async (
   const url = encodeURL({
     recipient,
     amount: amountBigNumber,
-    label: "Lets play",
-    message: "More ways to extract liquidity from your friends",
+    label: "Your Store Name",
+    message: "Thank you for your purchase!",
     memo,
   });
 

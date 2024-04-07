@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 // Dynamically import the QRCodeComponent with SSR disabled
-const QRCodeComponent = dynamic(() => import("./qrcompoent"), {
+const QRCodeComponent = dynamic(() => import("../components/QRCodeComponent"), {
   ssr: false,
 });
 
