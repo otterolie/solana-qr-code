@@ -49,9 +49,7 @@ export default function Home() {
       const data = await response.json();
       setPaymentLink(data.url);
       setReferenceID(data.referenceID);
-      setStatusMessage(
-        "Payment link generated. Please scan the QR code to fund your wallet."
-      );
+      setStatusMessage("Payment link generated. Please scan the QR code.");
     } catch (error) {
       console.error("Failed to fetch the payment link:", error);
       setStatusMessage("Failed to generate payment link. Please try again.");
