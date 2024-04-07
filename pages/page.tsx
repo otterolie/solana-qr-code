@@ -1,9 +1,7 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // Dynamically import the QRCodeComponent with SSR disabled
 const QRCodeComponent = dynamic(() => import("./QRCodeComponent"), {
@@ -22,16 +20,21 @@ export default function Home() {
     // Assuming address and amount are both strings
     const address = router.query.address as string;
     const amount = router.query.amount as string;
+    const currency = (router.query.currency as string) || "SOL";
 
     if (address && amount) {
-      generatePaymentLink(address, amount);
+      generatePaymentLink(address, amount, currency);
     } else {
       setStatusMessage("Missing address or amount parameters.");
     }
   }, [router.query]);
 
   // Annotate the parameters' types
-  const generatePaymentLink = async (recipient: string, amount: string) => {
+  const generatePaymentLink = async (
+    recipient: string,
+    amount: string,
+    currency: string
+  ) => {
     setStatusMessage("Generating payment link...");
     try {
       const response = await fetch("/api/create-payment-link", {
@@ -39,18 +42,21 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ recipient, amount }),
+        body: JSON.stringify({ recipient, amount, currency }),
       });
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        const errorMessage = `Network response was not ok (${response.status}): ${response.statusText}`;
+        console.error("Failed to fetch the payment link:", errorMessage);
+        setStatusMessage(`Failed to generate payment link: ${errorMessage}`);
+        return;
       }
 
       const data = await response.json();
       setPaymentLink(data.url);
       setReferenceID(data.referenceID);
       setStatusMessage(
-        "Payment link generated. Please scan the QR code to fund your wallet."
+        "Payment link generated. Please scan the QR code to complete the payment."
       );
     } catch (error) {
       console.error("Failed to fetch the payment link:", error);
