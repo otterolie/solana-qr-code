@@ -1,9 +1,6 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // Dynamically import the QRCodeComponent with SSR disabled
 const QRCodeComponent = dynamic(() => import("./QRCodeComponent"), {

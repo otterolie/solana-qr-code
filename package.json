@@ -11,6 +11,7 @@
   "dependencies": {
     "@solana/pay": "^0.2.5",
     "@solana/web3.js": "^1.91.4",
+    "@vercel/speed-insights": "^1.0.10",
     "next": "14.1.4",
     "qr-code-styling": "^1.6.0-rc.1",
     "qrcode.react": "^3.1.0",

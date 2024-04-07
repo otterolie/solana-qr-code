@@ -1,3 +1,4 @@
+// pages/api/create-payment-link.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { clusterApiUrl, Connection, PublicKey, Keypair } from "@solana/web3.js";
 import { encodeURL } from "@solana/pay";
@@ -5,7 +6,9 @@ import BigNumber from "bignumber.js";
 import fs from "fs";
 import path from "path";
 
+// Function to append reference ID and public key to a JSON file within the 'data' folder in the 'public' directory
 const appendToJSONFile = (id: string, publicKey: string) => {
+  // Adjusted path to point to 'data' folder within the 'public' directory
   const filePath = path.join(
     process.cwd(),
     "public",
@@ -13,11 +16,13 @@ const appendToJSONFile = (id: string, publicKey: string) => {
     "references.json"
   );
 
+  // Ensure the 'data' directory exists within 'public'
   const dirPath = path.dirname(filePath);
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
   }
 
+  // Check if the 'references.json' file exists and read it, otherwise start with an empty array
   const fileData: { id: string; publicKey: string }[] = fs.existsSync(filePath)
     ? JSON.parse(fs.readFileSync(filePath, "utf8"))
     : [];
