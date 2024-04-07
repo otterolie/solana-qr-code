@@ -23,16 +23,15 @@ const Home = () => {
           alt="SolBet Banner"
           className={styles.bannerImage}
         />
-        <div className={styles.overlayText}>Bet on the Future</div>{" "}
+        <div className={styles.overlayText}>Bet on the Future today</div>{" "}
+        {/* Example text */}
       </div>
 
       <div className={styles.status}>
         Blockchain Status: Down - Last Block Time: unknown
       </div>
 
-      <footer className={styles.footer}>
-        Powered by <a href="https://www.solana.com">Solana Blockchain</a>
-      </footer>
+      <footer className={styles.footer}>Powered by Solana Blockchain</footer>
     </div>
   );
 };
