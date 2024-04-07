@@ -5,9 +5,10 @@ import BigNumber from "bignumber.js";
 import fs from "fs";
 import path from "path";
 
+// Define NETWORK at the top, so it's available when used later in the code
 const NETWORK = "devnet";
-// const NETWORK = "mainnet-beta";
 
+// Connection to the Solana devnet with the "confirmed" commitment level
 const connection = new Connection(clusterApiUrl(NETWORK), "confirmed");
 
 const appendToJSONFile = (id: string, publicKey: string) => {

@@ -1,0 +1,26 @@
+/* styles/Home.module.css */
+.main {
+  padding: 5rem 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 4rem;
+  text-align: center;
+}
+
+.description {
+  text-align: center;
+  margin: 4rem 0;
+  font-size: 1.5rem;
+}
+
+.banner {
+  max-width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}

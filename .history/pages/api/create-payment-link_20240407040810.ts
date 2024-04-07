@@ -5,10 +5,8 @@ import BigNumber from "bignumber.js";
 import fs from "fs";
 import path from "path";
 
+// Easily change this variable to switch between networks ("devnet", "mainnet-beta", "testnet")
 const NETWORK = "devnet";
-// const NETWORK = "mainnet-beta";
-
-const connection = new Connection(clusterApiUrl(NETWORK), "confirmed");
 
 const appendToJSONFile = (id: string, publicKey: string) => {
   const filePath = path.join(
@@ -27,7 +25,10 @@ const appendToJSONFile = (id: string, publicKey: string) => {
     ? JSON.parse(fs.readFileSync(filePath, "utf8"))
     : [];
 
+  // Append the new data to the fileData array
   fileData.push({ id, publicKey });
+
+  // Write the updated array back to 'references.json' within the 'public/data' directory
   fs.writeFileSync(filePath, JSON.stringify(fileData, null, 2));
 };
 
@@ -46,6 +47,8 @@ export default async function handler(
   }
 
   try {
+    // Use the NETWORK variable to dynamically choose the network
+    const connection = new Connection(clusterApiUrl(NETWORK), "confirmed");
     const referenceKeypair = new Keypair();
     const referencePublicKey = referenceKeypair.publicKey;
     const bigAmount = new BigNumber(amount);
